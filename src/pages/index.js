@@ -1,8 +1,9 @@
 import Head from "next/head";
+import axios from "axios";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import ProductFeed from "../components/ProductFeed";
-import products from "../data/products";
+import localProducts from "../data/products";
 
 export default function Home({ products }) {
   return (
@@ -21,20 +22,17 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 8000);
-
   try {
-    const response = await fetch("https://fakestoreapi.com/products", {
+    const response = await axios.get("https://fakestoreapi.com/products", {
+      timeout: 8000,
       headers: {
         Accept: "application/json",
         "User-Agent": "ShopWave/1.0",
       },
-      signal: controller.signal,
     });
-    const data = await response.json();
+    const data = response.data;
 
-    if (response.ok && Array.isArray(data) && data.length > 0) {
+    if (Array.isArray(data) && data.length > 0) {
       return {
         props: {
           products: data,
@@ -44,14 +42,15 @@ export async function getServerSideProps() {
 
     console.error("Product API returned an invalid response", response.status);
   } catch (error) {
-    console.error("Product API request failed", error.message);
-  } finally {
-    clearTimeout(timeout);
+    console.error(
+      "Product API request failed",
+      error.response?.status || error.code || error.message
+    );
   }
 
   return {
     props: {
-      products,
+      products: localProducts,
     },
   };
 }
