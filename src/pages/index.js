@@ -5,26 +5,24 @@ import ProductFeed from "../components/ProductFeed";
 
 export default function Home({ products }) {
   return (
-    <div key={1} className="bg-gray-100">
+    <div className="min-h-screen bg-slate-100 text-slate-800">
       <Head>
-        <title>Amazon 2.0</title>
+        <title>ShopWave</title>
       </Head>
-      <Header/>
+      <Header />
 
-      <main className="max-w-screen-xl mx-auto">
-        <Banner/>
-
-        <ProductFeed products={products}/>
+      <main className="mx-auto max-w-screen-xl px-4 py-6">
+        <Banner />
+        <ProductFeed products={products} />
       </main>
     </div>
   );
 }
-export async function getServerSideProps(context){
-  const products = await fetch("https://fakestoreapi.com/products").then(
-    (res) => res.json()
-  );
 
-  return{
+export async function getServerSideProps() {
+  const products = await fetch("https://fakestoreapi.com/products").then((res) => res.json());
+
+  return {
     props: {
       products,
     },

@@ -1,70 +1,65 @@
-import Image from "next/image";
-import { 
-    MenuIcon,
-    SearchIcon,
-    ShoppingCartIcon,
-   } from "@heroicons/react/outline";
-import { signIn, signOut, useSession} from "next-auth/react";
+import { MenuIcon, SearchIcon, ShoppingCartIcon } from "@heroicons/react/outline";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { selectItems } from "../slices/basketSlice";
 
-
 function Header() {
   const { data: session } = useSession();
   const router = useRouter();
-  const items = useSelector(selectItems)
+  const items = useSelector(selectItems);
 
   return (
     <header>
-       <div className="flex items-center bg-amazon_blue p-1 flex-grow py-2">
-         <div className="mt-2 flex items-center flex-grow sm:flex-grow-0">
-          <Image
-          onClick={() => router.push('/')} 
-            src='https://links.papareact.com/f90'
-            width={150}
-            height={40}
-            objectFit="contain"
-            className="cursor-pointer"
+      <div className="flex items-center bg-gray-900 px-4 py-3 text-white shadow-sm">
+        <div
+          onClick={() => router.push('/')}
+          className="mr-4 cursor-pointer rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-lg font-bold tracking-wide text-indigo-200 shadow-sm transition hover:bg-gray-700"
+        >
+          ShopWave
+        </div>
+
+        <div className="hidden h-10 flex-grow items-center rounded-md border border-gray-700 bg-white text-gray-700 shadow-inner sm:flex">
+          <input
+            className="h-full w-6 flex-grow rounded-l-md border-none bg-transparent px-4 text-sm outline-none"
+            type="text"
+            placeholder="Search products"
           />
-         </div>
-         {/*search bar*/}
-         <div className="hidden sm:flex items-center h-10 rounded-md flex-grow cursor-pointer bg-yellow-400 hover:bg-yellow-500">
-           <input className="p-2 h-full w-6 flex-grow flex-shrink rounded-l-md focus:outline-none px-4" type="text" />
-           <SearchIcon className="h-12 p-4"/>
-         </div>
-         <div className="text-white flex items-center text-xs space-x-6 mx-6 whitespace-nowrap">
-         <div onClick={!session ? signIn : signOut} className="link">
-         <p  className="hover:underline">
-           {session ? `Hello, ${session.user.name}` : "SignIn"}
-         </p>
-         <p  className="font-extrabold md:text-sm">Acount & lists</p>
-       </div>
+          <div className="flex h-full items-center bg-indigo-500 px-4 text-white hover:bg-indigo-400">
+            <SearchIcon className="h-5 w-5" />
+          </div>
+        </div>
 
-           <div className=" link">
-             <p>Returns</p>
-             <p className="font-extrabold md:text-sm">& orders</p>
-           </div>
-           
-           <div onClick={() => router.push('/checkout')} className=" link relative flex items-center">
-             <span className="absolute top-0 right-0 md:right-10 h-4 w-4 bg-yellow-400 rounded-full text-center text-black font-bold">
-                {items.length}
-             </span>
+        <div className="ml-6 flex items-center gap-5 whitespace-nowrap text-xs text-gray-200">
+          <div onClick={!session ? signIn : signOut} className="link">
+            <p className="text-gray-300">{session ? `Hello, ${session.user.name}` : 'Sign in'}</p>
+            <p className="text-sm font-bold text-white">Account</p>
+          </div>
 
-           <ShoppingCartIcon className="h-10 "/>
-           <p className="hidden md:inline font-extrabold md:text-sm mt-2">Bascket</p>
-           </div>
-         </div>
+          <div onClick={() => router.push('/orders')} className="link">
+            <p className="text-gray-300">Returns</p>
+            <p className="text-sm font-bold text-white">Orders</p>
+          </div>
+
+          <div onClick={() => router.push('/checkout')} className="relative flex items-center gap-2">
+            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-400 text-[10px] font-bold text-gray-900">
+              {items.length}
+            </span>
+            <ShoppingCartIcon className="h-8 w-8" />
+            <p className="hidden text-sm font-bold text-white md:inline">Cart</p>
+          </div>
+        </div>
       </div>
-         {/*bottom nav*/}
-      <div className="flex items-center space-x-3 p-2 pl-6 bg-amazon_blue-light text-white text-sm">
-        <p  className="link flex items-center ">
-          <MenuIcon className="h-6 mr-5"/>
-          all</p>
-          <p className="link">featured </p>
-          <p className="link">new arrival </p>
-          <p className="link">catalog </p>
-          <p className="link hidden lg-inline-flex">electronics </p>
+
+      <div className="flex items-center space-x-4 bg-gray-700 px-5 py-2 text-sm text-gray-100">
+        <p className="link flex items-center">
+          <MenuIcon className="mr-2 h-5 w-5" />
+          All
+        </p>
+        <p className="link">Featured</p>
+        <p className="link">New arrivals</p>
+        <p className="link">Deals</p>
+        <p className="link hidden lg:inline-flex">Electronics</p>
       </div>
     </header>
   );
