@@ -39,23 +39,15 @@ This project includes a home page with product listings, a shopping cart, Google
 
 ![Home page](./docs/screenshots/home-page.png)
 
-### Product listing and deals
+### Sign-in screen
 
-![Product feed](./docs/screenshots/product-feed.png)
+![Sign in](./docs/screenshots/sign-in-page.png)
 
-### Cart / checkout
+### Shopping cart
 
-![Checkout page](./docs/screenshots/checkout-page.png)
+![Shopping cart](./docs/screenshots/shopping-cart.png)
 
-### Orders page
-
-![Orders page](./docs/screenshots/orders-page.png)
-
-### Success page
-
-![Success page](./docs/screenshots/success-page.png)
-
-> Add your actual screenshots into the `docs/screenshots` folder and keep the same file names for the images above to render correctly.
+> Save the screenshots you want to include in the `docs/screenshots` folder using these exact filenames so they render correctly in the README.
 
 ## How it works
 
