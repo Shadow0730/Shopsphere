@@ -21,6 +21,34 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const response = await fetch("https://fakestoreapi.com/products", {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "ShopWave/1.0",
+      },
+      signal: controller.signal,
+    });
+    const data = await response.json();
+
+    if (response.ok && Array.isArray(data) && data.length > 0) {
+      return {
+        props: {
+          products: data,
+        },
+      };
+    }
+
+    console.error("Product API returned an invalid response", response.status);
+  } catch (error) {
+    console.error("Product API request failed", error.message);
+  } finally {
+    clearTimeout(timeout);
+  }
+
   return {
     props: {
       products,
