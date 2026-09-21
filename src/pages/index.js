@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import ProductFeed from "../components/ProductFeed";
+import products from "../data/products";
 
 export default function Home({ products }) {
   return (
@@ -20,19 +21,6 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
-  let products = [];
-
-  try {
-    const response = await fetch("https://fakestoreapi.com/products");
-    const data = await response.json();
-
-    if (response.ok && Array.isArray(data)) {
-      products = data;
-    }
-  } catch (error) {
-    products = [];
-  }
-
   return {
     props: {
       products,
