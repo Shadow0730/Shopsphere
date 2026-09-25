@@ -1,8 +1,12 @@
 import { buffer } from "micro";
 import * as admin from 'firebase-admin'
 
-//secure a connection to Firebase from backend
-const serviceAccount = require('../../../permissions.json');
+// Keep Admin SDK credentials server-side; never commit the service-account JSON.
+const serviceAccount = {
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+};
 const app = !admin.apps.length ? admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 }) 
@@ -20,7 +24,7 @@ const fulfillOrder = async (session) => {
    console.log('Fulfilling order', session)
 
     return app.firestore()
-    .collection("user")
+    .collection("users")
     .doc(session.metadata.email)
     .collection("orders")
     .doc(session.id)

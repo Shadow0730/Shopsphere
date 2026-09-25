@@ -6,3 +6,6 @@ node_modules
 .env.production
 .env.*
 !.env.example
+.vercel
+.env*
+permissions.json

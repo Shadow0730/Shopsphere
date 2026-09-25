@@ -13,22 +13,28 @@ function Checkout() {
      const { data: session } = useSession();
 
      const createCheckoutSession = async () => {
-       const stripe = await stripePromise;
+       try {
+         const stripe = await stripePromise;
 
-       // call the backend
-       const checkoutSession = await axios.post('/api/create-checkout-session',{
-         items: items,
-         email: session.user.email,
-       });
+         if (!stripe) {
+           throw new Error('Stripe could not be loaded. Check STRIPE_PUBLIC_KEY.');
+         }
 
-       //redirect the user to stripe Checkout
-       const result = await stripe.redirectToCheckout({
-         sessionId: checkoutSession.data.id,
-       });
+         const checkoutSession = await axios.post('/api/create-checkout-session', {
+           items,
+           email: session.user.email,
+         });
 
-       if (result.error) {
-         alert(result.error.message);
-       };
+         const result = await stripe.redirectToCheckout({
+           sessionId: checkoutSession.data.id,
+         });
+
+         if (result.error) {
+           alert(result.error.message);
+         }
+       } catch (error) {
+         alert(error.response?.data?.error || error.message || 'Unable to proceed to checkout.');
+       }
      };
 
   return (
